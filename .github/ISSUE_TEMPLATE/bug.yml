@@ -1,0 +1,64 @@
+name: Bug 反馈
+description: 报告 Echo酱的问题或异常
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: module
+    attributes:
+      label: 问题模块
+      options:
+        - 消息推送
+        - 决策任务
+        - Robot / 聊天
+        - 客户端（鸿蒙）
+        - 客户端（OPPO）
+        - 客户端（小米）
+        - 管理后台
+        - 实时连接（SSE/WS）
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述
+      description: 清晰描述你遇到的问题
+      placeholder: 推送消息后设备未收到通知...
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 如何复现这个问题
+      placeholder: |
+        1. 调用 POST /push/{push_id} 发送消息
+        2. 返回 200，status 为 queued
+        3. 设备端未收到推送
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望行为
+      placeholder: 设备应在几秒内收到推送通知
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: 环境信息
+      description: 相关的设备型号、系统版本、客户端版本等
+      placeholder: |
+        - 设备：华为 Mate 60
+        - 系统：HarmonyOS 4.0
+        - 客户端版本：1.0.0
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: 相关日志或截图
+      description: 如有 API 返回内容、错误截图等请贴在这里
+    validations:
+      required: false

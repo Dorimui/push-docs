@@ -1,0 +1,41 @@
+name: 功能建议
+description: 提出新功能或改进建议
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: module
+    attributes:
+      label: 相关模块
+      options:
+        - 消息推送
+        - 决策任务
+        - Robot / 聊天
+        - 客户端
+        - 管理后台
+        - API
+        - 文档
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: 功能描述
+      description: 描述你希望实现的功能
+      placeholder: 希望支持 Telegram 推送通道...
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: 使用场景
+      description: 为什么需要这个功能，解决什么问题
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 替代方案
+      description: 是否有其他方式可以实现类似效果
+    validations:
+      required: false

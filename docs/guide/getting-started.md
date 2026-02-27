@@ -38,4 +38,4 @@ curl -X POST https://echo.dorimu.cn/push/{push_id} \
   }'
 ```
 
-更多接口详情请参阅 [API 文档](/docs/guide/api)。
+更多接口详情请参阅 [API 文档](/guide/api)。
