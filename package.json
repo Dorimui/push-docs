@@ -1,0 +1,16 @@
+{
+  "name": "push-docs",
+  "version": "1.0.0",
+  "description": "Echo酱-推送服务说明文档",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "keywords": [],
+  "author": "dorimu",
+  "license": "ISC",
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  }
+}
