@@ -67,10 +67,12 @@ https://echo.dorimu.cn
 |---|---|---|---|
 | `format` | `string` | 否 | 消息格式，默认 `normal`。可选：`normal` / `image` / `button` |
 | `title` | `string` | 是 | 消息标题，最长 120 字符 |
-| `description` | `string` | 否 | 消息摘要，最长 256 字符 |
-| `content` | `string` | `normal` 时必填 | 消息内容，最长 4000 字符 |
+| `description` | `string` | 否 | 消息摘要，最多保留 256 字符 |
+| `content` | `string` | `normal` 时必填 | 消息内容，最多保留 4000 字符 |
 | `image_url` | `string` | `image` 时必填 | 图片地址，必须为 `https` |
 | `buttons` | `array` | `button` 时必填 | 按钮列表，1-5 项，每项含 `text` 和 `url` |
+| `message_type` | `string` | 否 | 消息类型，默认 `normal`。可选：`normal` / `system` |
+| `notification_profile` | `string` | 否 | 通知配置。可选：`general` / `system_alert`；未传时，普通消息默认 `general`，系统消息默认 `system_alert` |
 
 **示例 — 普通文本消息：**
 
@@ -248,6 +250,7 @@ curl -X POST https://echo.dorimu.cn/push/{push_id}/decision \
 | `decided_at` | `string` | 决策时间（RFC3339，可选） |
 | `expires_at` | `string` | 过期时间（RFC3339） |
 | `created_at` | `string` | 创建时间（RFC3339） |
+| `updated_at` | `string` | 最后更新时间（RFC3339） |
 | `is_final` | `bool` | 是否为终态 |
 
 ### GET `/push/{push_id}/decision/{task_id}/wait`
@@ -364,7 +367,9 @@ Robot 有三种连接方式，按推荐顺序：
 | `action_id` | `string` | 按钮 ID（仅 `action_clicked`） |
 | `action_value` | `string` | 按钮附加数据（仅 `action_clicked`） |
 | `target_message_id` | `string` | 被点击的卡片消息 ID（仅 `action_clicked`） |
+| `clicked_user_id` | `string` | 点击按钮的用户 ID（仅 `action_clicked`，可选） |
 | `created_at` | `string` | 创建时间（RFC3339） |
+| `expires_at` | `string` | 任务过期时间（RFC3339，可选） |
 
 ### POST `/robot/reply`
 
@@ -375,7 +380,7 @@ Robot 回执上报（配合 SSE / Poll 模式使用，WS 模式直接在连接�
 | 字段 | 类型 | 必填 | 说明 |
 |---|---|---|---|
 | `job_id` | `string` | 是 | 对应任务的 `job_id` |
-| `content` | `string` | 是 | 回复内容 |
+| `content` | `string` | `content_type` 非 `pass` 时必填 | 回复内容；`content_type=pass` 时可为空 |
 | `is_complete` | `bool` | 是 | 是否为完整回复（流式输出时先发 `false`，最后一条发 `true`） |
 | `content_type` | `string` | 否 | 默认 `text`。可选：`text` / `markdown` / `card` / `ocard` / `pass` |
 | `action` | `string` | 否 | 默认 `append`。可选：`append` / `edit` |
@@ -395,6 +400,14 @@ Robot 主动发送消息，不依赖用户先发消息。
 | `content` | `string` | `append` / `edit` 时必填 | 消息内容 |
 | `content_type` | `string` | 否 | 默认 `text`。可选：`text` / `markdown` / `card` / `ocard` |
 | `is_complete` | `bool` | 否 | 默认 `true` |
+| `idempotency_key` | `string` | 否 | 幂等键，最长 128 字符；也可以通过 `Idempotency-Key` Header 传入 |
+
+**幂等重试：**
+
+- `idempotency_key` 与 `Idempotency-Key` Header 同时存在时，两者必须一致，否则返回 `400`
+- 同一个 Robot 使用相同幂等键和相同请求内容重试时，返回相同的稳定 `message_id`，不会重复创建消息
+- 相同幂等键用于不同请求内容时返回 `409`
+- 幂等记录至少保留 24 小时
 
 **返回示例：**
 
@@ -430,11 +443,14 @@ Robot 主动发送消息，不依赖用户先发消息。
 | `sessions[].state` | `string` | 会话状态 |
 | `sessions[].last_active_at` | `string` | 最后活跃时间 |
 | `sessions[].created_at` | `string` | 创建时间 |
+| `sessions[].updated_at` | `string` | 最后更新时间 |
 | `total` | `int` | 总数 |
+| `page` | `int` | 当前页码 |
+| `limit` | `int` | 当前每页数量 |
 
 ### GET `/robot/history`
 
-查询指定会话的历史消息，用于 Robot 获取对话上下文。
+查询指定会话的历史消息，用于 Robot 获取对话上下文。返回当前会话的最新消息，按消息序号倒序排列。
 
 **Query 参数：**
 
@@ -449,6 +465,7 @@ Robot 主动发送消息，不依赖用户先发消息。
 |---|---|---|
 | `messages[].message_id` | `string` | 消息 ID |
 | `messages[].sender_type` | `string` | 发送者类型：`user` / `robot` |
+| `messages[].sender_id` | `string` | 发送者 ID |
 | `messages[].content_type` | `string` | 内容类型：`text` / `markdown` / `card` / `ocard` |
 | `messages[].content` | `string` | 消息内容 |
 | `messages[].sequence_num` | `int64` | 消息序号 |
@@ -456,6 +473,7 @@ Robot 主动发送消息，不依赖用户先发消息。
 | `messages[].recalled` | `bool` | 是否已撤回 |
 | `messages[].parent_id` | `string` | 父消息 ID（Robot 回复时指向用户原始消息） |
 | `messages[].created_at` | `string` | 创建时间（RFC3339） |
+| `total` | `int` | 当前会话的消息总数 |
 
 ---
 

@@ -20,7 +20,7 @@ features:
   - title: 简单易用
     details: 简洁的 Webhook API，一个 HTTP 请求即可推送消息到手机。
   - title: 原生推送支持
-    details: 已支持鸿蒙、OPPO、小米原生推送通道，消息即时送达，省电无后台。
+    details: 已支持鸿蒙、OPPO、小米、荣耀、vivo 原生推送通道，消息即时送达，省电无后台。
   - title: 多端客户端
     details: 前往各大应用商店搜索下载 Echo酱，开箱即用。
   - title: 稳定可靠

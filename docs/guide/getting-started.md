@@ -13,6 +13,8 @@ Echo酱已上架以下应用商店，搜索「Echo酱」即可下载：
 - 华为应用市场（鸿蒙原生推送）
 - OPPO 软件商店（OPPO 原生推送）
 - 小米应用商店（小米原生推送）
+- 荣耀应用商店（荣耀原生推送）
+- vivo应用商店（vivo原生推送）
 
 原生推送通道无需保活后台，消息即时送达，省电高效。
 
@@ -37,5 +39,7 @@ curl -X POST https://echo.dorimu.cn/push/{push_id} \
     "content": "这是一条测试消息"
   }'
 ```
+
+需要了解消息、频道、Robot 会话和通知设置，请参阅 [App 功能说明](/guide/app-usage)。
 
 更多接口详情请参阅 [API 文档](/guide/api)。
