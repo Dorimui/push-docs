@@ -2,6 +2,8 @@
 
 Echo酱推送服务对外提供 Webhook HTTP 接口，用于消息推送、决策任务投递和 Robot 接入。
 
+需要用访问令牌发送通知、查询或处理消息时，请参阅[消息中心 API](/guide/message-api)。从 AI 客户端接入请参阅 [MCP 接入](/guide/mcp)。
+
 ## 接入地址
 
 ```

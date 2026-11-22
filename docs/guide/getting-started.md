@@ -27,6 +27,8 @@ Echo酱已上架以下应用商店，搜索「Echo酱」即可下载：
 - 管理设备和通知偏好
 - 创建 Robot 和 PAT 令牌
 
+第一次使用时，可以打开[网页工作台的首次推送向导](/guide/web-console#首次推送)，按步骤检查设备、选择频道和发送测试通知。
+
 ## 推送消息
 
 获取渠道的 `push_id` 后，通过一个 HTTP 请求即可推送消息：
@@ -43,3 +45,5 @@ curl -X POST https://echo.dorimu.cn/push/{push_id} \
 需要了解消息、频道、Robot 会话和通知设置，请参阅 [App 功能说明](/guide/app-usage)。
 
 更多接口详情请参阅 [API 文档](/guide/api)。
+
+需要从 AI 客户端发送通知，请参阅 [MCP 接入](/guide/mcp)。手机没有收到通知时，可以先看[常见问题](/guide/faq)。

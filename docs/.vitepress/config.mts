@@ -18,11 +18,17 @@ export default defineConfig({
           items: [
             { text: '快速开始', link: '/guide/getting-started' },
             { text: 'App 功能说明', link: '/guide/app-usage' },
+            { text: '网页工作台', link: '/guide/web-console' },
+            { text: '常见问题', link: '/guide/faq' },
           ],
         },
         {
           text: '开发者接入',
-          items: [{ text: 'API 文档', link: '/guide/api' }],
+          items: [
+            { text: 'API 文档', link: '/guide/api' },
+            { text: '消息中心 API', link: '/guide/message-api' },
+            { text: 'MCP 接入', link: '/guide/mcp' },
+          ],
         },
       ],
     },
