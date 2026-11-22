@@ -73,6 +73,8 @@ https://echo.dorimu.cn
 | `buttons` | `array` | `button` 时必填 | 按钮列表，1-5 项，每项含 `text` 和 `url` |
 | `message_type` | `string` | 否 | 消息类型，默认 `normal`。可选：`normal` / `system` |
 | `notification_profile` | `string` | 否 | 通知配置。可选：`general` / `system_alert`；未传时，普通消息默认 `general`，系统消息默认 `system_alert` |
+| `topic` | `string` | 否 | 消息主题，最长 120 个字符。消息中心可以按相同主题折叠 |
+| `privacy` | `object` | 否 | [隐私推送设置](#topic-and-privacy)，用于自定义设备系统通知的标题和正文 |
 
 **示例 — 普通文本消息：**
 
@@ -120,6 +122,35 @@ curl -X POST https://echo.dorimu.cn/push/{push_id} \
   }
 }
 ```
+
+### 消息主题与隐私推送 {#topic-and-privacy}
+
+给多条消息传入相同的 `topic`，App 和网页消息中心就能把它们折叠成一组。发送时可以只设置主题，也可以同时启用隐私推送。
+
+| `privacy` 内的字段 | 类型 | 说明 |
+|---|---|---|
+| `enable` | `bool` | 设为 `true` 时启用替代文案。省略整个对象或设为 `false` 时，沿用常规推送文案 |
+| `title` | `string` | 设备系统通知的替代标题，最长 120 个字符。留空时显示「PushFlow」 |
+| `content` | `string` | 设备系统通知的替代正文，最长 256 个字符。留空时显示「你收到一条新消息」 |
+
+启用后，设备系统通知和 App 中设置的稍后推送提醒都使用替代标题和正文，原消息的图片和按钮只在应用内查看。消息中心继续显示外层 `title` 和 `content` 对应的原文。
+
+**示例 — 工单主题与隐私推送**
+
+```json
+{
+  "title": "工单 #123 已分配",
+  "content": "请在今天下班前处理工单 #123。",
+  "topic": "工单",
+  "privacy": {
+    "enable": true,
+    "title": "工作通知",
+    "content": "你有一条新通知，请打开应用查看。"
+  }
+}
+```
+
+设备通知显示「工作通知」。打开 App 或网页消息详情后，可以查看工单原文和「工单」主题。
 
 ### 签名计算规则
 
